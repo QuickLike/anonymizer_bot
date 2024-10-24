@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Anonimizer.iml" filepath="$PROJECT_DIR$/.idea/Anonimizer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Anonymizer.iml" filepath="$PROJECT_DIR$/.idea/Anonymizer.iml" />
     </modules>
   </component>
 </project>
