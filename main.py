@@ -25,7 +25,7 @@ async def message_handle(message: Message, state: FSMContext):
     logging.info(f'Сообщение от пользователя с ID {user_id} из чата с ID {chat_id}. {message.text}')
     if chat_id == user_id:
         user_channel_status = await bot.get_chat_member(chat_id=ANONIM_GROUP_ID, user_id=user_id)
-        if user_channel_status['status'] == 'member':
+        if user_channel_status.status == 'member':
             username = message.from_user.username
             full_name = (f'ID ({user_id}) {message.from_user.first_name} {message.from_user.last_name}'.strip() +
                          (f' @{username}' if username else ''))
@@ -45,7 +45,7 @@ async def trolling(message: Message, state: FSMContext):
     chat_id = message.chat.id
     if chat_id == user_id:
         user_channel_status = await bot.get_chat_member(chat_id=ANONIM_GROUP_ID, user_id=user_id)
-        if user_channel_status['status'] == 'member':
+        if user_channel_status.status == 'member':
             await state.update_data(phone_number=message.text)
             await state.clear()
             await bot.send_message(user_id, 'Теперь вы можете писать сообщение.')
