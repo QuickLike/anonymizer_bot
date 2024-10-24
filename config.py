@@ -11,4 +11,4 @@ bot = Bot(os.getenv('BOT_TOKEN'))
 ANONIM_GROUP_ID = os.getenv('ANONIM_GROUP_ID')
 FULL_DATA_GROUP_ID = os.getenv('FULL_DATA_GROUP_ID')
 
-DELAY_TIME = 0.5
+DELAY_TIME = 2
