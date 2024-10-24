@@ -2,22 +2,24 @@ import asyncio
 import logging
 import sys
 
-from aiogram import types
+from aiogram.types import Message
 from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
 from aiogram.methods import DeleteWebhook
 
 from config import dp, bot, ANONIM_GROUP_ID, FULL_DATA_GROUP_ID, DELAY_TIME
+from states import Form
 
 
 @dp.message(Command('start'))
-async def start(message: types.Message):
+async def start(message: Message):
     user_id = message.from_user.id
     logging.info(f'Пользователь с ID {user_id} запустил бота.')
     await message.answer('👤Anonymizer👤\n\nВы можете отправить сообщение, фото или видео.')
 
 
 @dp.message()
-async def message_handle(message: types.Message):
+async def message_handle(message: Message, state: FSMContext):
     user_id = message.from_user.id
     chat_id = message.chat.id
     logging.info(f'Сообщение от пользователя с ID {user_id} из чата с ID {chat_id}. {message.text}')
@@ -33,8 +35,22 @@ async def message_handle(message: types.Message):
             await message.copy_to(chat_id=ANONIM_GROUP_ID)
             await message.delete()
         else:
-            #  Введите номер телефона
-            pass
+            await state.set_state(Form.phone_number)
+            await message.answer('Введите ваш номер телефона')
+
+
+@dp.message(Form.phone_number)
+async def trolling(message: Message, state: FSMContext):
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+    if chat_id == user_id:
+        user_channel_status = await bot.get_chat_member(chat_id=ANONIM_GROUP_ID, user_id=user_id)
+        if user_channel_status['status'] == 'member':
+            await state.update_data(phone_number=message.text)
+            await state.clear()
+            await bot.send_message(user_id, 'Теперь вы можете писать сообщение.')
+        else:
+            await bot.send_message(user_id, 'Вы ввели неправильный номер!')
 
 
 async def main():
