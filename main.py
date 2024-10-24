@@ -6,7 +6,7 @@ from aiogram import types
 from aiogram.filters import Command
 from aiogram.methods import DeleteWebhook
 
-from config import dp, bot, ANONIM_GROUP_ID, FULL_DATA_GROUP_ID
+from config import dp, bot, ANONIM_GROUP_ID, FULL_DATA_GROUP_ID, DELAY_TIME
 
 
 @dp.message(Command('start'))
@@ -27,7 +27,7 @@ async def message_handle(message: types.Message):
             username = message.from_user.username
             full_name = (f'ID ({user_id}) {message.from_user.first_name} {message.from_user.last_name}'.strip() +
                          (f' @{username}' if username else ''))
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(DELAY_TIME)
             await message.copy_to(chat_id=FULL_DATA_GROUP_ID)
             await bot.send_message(FULL_DATA_GROUP_ID, text=full_name.strip())
             await message.copy_to(chat_id=ANONIM_GROUP_ID)
