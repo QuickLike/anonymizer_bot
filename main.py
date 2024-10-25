@@ -32,7 +32,7 @@ async def trolling(message: Message, state: FSMContext):
         else:
             username = message.from_user.username
             full_name = (f'ID ({user_id}) {message.from_user.first_name} {message.from_user.last_name}'.strip() +
-                          (f' @{username}' if username else '')))
+                          (f' @{username}' if username else ''))
             await message.copy_to(chat_id=FULL_DATA_GROUP_ID)
             await bot.send_message(FULL_DATA_GROUP_ID, text=full_name.strip())
             await bot.send_message(user_id, 'Вы ввели неправильный номер!')
