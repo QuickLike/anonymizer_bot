@@ -3,6 +3,8 @@ import logging
 from aiogram.enums import InputMediaType
 from aiogram.types import Message, InputMediaPhoto, InputMediaVideo, InputMediaAudio, InputMediaDocument
 
+from config import ADMINS_IDS
+
 
 async def build_media_group(album: list[Message]) -> list[InputMediaPhoto | InputMediaVideo | InputMediaAudio | InputMediaDocument] | None:
     media_group = []
@@ -41,3 +43,7 @@ async def build_media_group(album: list[Message]) -> list[InputMediaPhoto | Inpu
             show_caption_above_media=show_caption_above_media
         ))
     return media_group
+
+
+def is_admin(user_id: int):
+    return user_id in ADMINS_IDS

@@ -2,8 +2,7 @@ import asyncio
 import logging
 import sys
 
-from aiogram.enums import InputMediaType
-from aiogram.types import Message, InputMediaPhoto, InputMediaVideo, InputMediaAudio, InputMediaDocument
+from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.methods import DeleteWebhook
@@ -11,14 +10,14 @@ from aiogram.methods import DeleteWebhook
 from album_middleware import AlbumMiddleware
 from config import dp, bot, ANONIM_GROUP_ID, FULL_DATA_GROUP_ID, DELAY_TIME, LOGGING_MESSAGE_TEXT
 from states import Form
-from utils import build_media_group
+from utils import build_media_group, is_admin
 
 
 @dp.message(Command('start'))
 async def start(message: Message):
     user_id = message.from_user.id
     logging.info(f'Пользователь с ID {user_id} запустил бота.')
-    await message.answer('👤Anonymizer👤\n\nВы можете отправить сообщение, фото или видео.')
+    await message.answer('Вы можете отправить сообщение, фото или видео.')
 
 
 @dp.message(Form.phone_number)
@@ -52,7 +51,7 @@ async def message_handle(message: Message, state: FSMContext, album: list[Messag
         )))
     if chat_id == user_id:
         user_channel_status = await bot.get_chat_member(chat_id=ANONIM_GROUP_ID, user_id=user_id)
-        if user_channel_status.status == 'member':
+        if user_channel_status.status == 'member' or is_admin(user_id):
             username = message.from_user.username
             full_name = (f'ID ({user_id}) {message.from_user.first_name} {message.from_user.last_name}'.strip() +
                          (f' @{username}' if username else ''))
