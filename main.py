@@ -18,6 +18,7 @@ async def start(message: Message):
     user_id = message.from_user.id
     logging.info(f'Пользователь с ID {user_id} запустил бота.')
     await message.answer('Вы можете отправить сообщение, фото или видео.')
+    await message.delete()
 
 
 @dp.message(Form.phone_number)
