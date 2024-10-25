@@ -18,7 +18,6 @@ async def start(message: Message):
     user_id = message.from_user.id
     logging.info(f'Пользователь с ID {user_id} запустил бота.')
     await message.answer('Вы можете отправить сообщение, фото или видео.')
-    await message.delete()
 
 
 @dp.message(Form.phone_number)
@@ -32,9 +31,9 @@ async def trolling(message: Message, state: FSMContext):
             await bot.send_message(user_id, 'Теперь вы можете писать сообщение.')
         else:
             username = message.from_user.username
-            full_name = ('Пользователь пытается получить доступ к боту\n' +
-                         (f'ID ({user_id}) {message.from_user.first_name} {message.from_user.last_name}'.strip() +
+            full_name = (f'ID ({user_id}) {message.from_user.first_name} {message.from_user.last_name}'.strip() +
                           (f' @{username}' if username else '')))
+            await message.copy_to(chat_id=FULL_DATA_GROUP_ID)
             await bot.send_message(FULL_DATA_GROUP_ID, text=full_name.strip())
             await bot.send_message(user_id, 'Вы ввели неправильный номер!')
 
